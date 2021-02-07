@@ -1,8 +1,8 @@
 package ide
 
 import (
-	"expatch/util"
 	"fmt"
+	"github.com/bsh100220/expatch/util"
 	set "github.com/deckarep/golang-set"
 	"io/ioutil"
 	"strings"
@@ -14,17 +14,17 @@ type IDE interface {
 }
 
 type JavaProject struct {
-	ProjectPath 	string		//项目根路径
-	JavaSrcPaths	[]string	//src源文件根路径
-	WebRootPaths	[]string	//WebRoot路径
-	ClassesOutPath	string		//class文件路径
+	ProjectPath    string   //项目根路径
+	JavaSrcPaths   []string //src源文件根路径
+	WebRootPaths   []string //WebRoot路径
+	ClassesOutPath string   //class文件路径
 }
 
-func GetInstance(typeName, projectConfigPath string) IDE{
+func GetInstance(typeName, projectConfigPath string) IDE {
 	currPath := util.GetAbsolutePath(util.GetCurrentDirectory())
 	if typeName == "idea" {
 		return &IdeaProject{JavaProject: JavaProject{ProjectPath: currPath}, ProjectConfigPath: projectConfigPath}
-	}else if typeName == "eclipse" {
+	} else if typeName == "eclipse" {
 		return &EclipseProject{JavaProject: JavaProject{ProjectPath: currPath}}
 	}
 

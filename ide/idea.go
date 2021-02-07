@@ -3,7 +3,7 @@ package ide
 import (
 	"encoding/xml"
 	"errors"
-	"expatch/util"
+	"github.com/bsh100220/expatch/util"
 	"io/ioutil"
 	"strings"
 )
@@ -97,7 +97,7 @@ type IdeaProject struct {
 	ProjectConfigPath string
 }
 
-func (idea *IdeaProject) AnalysisProjectConfig()(*JavaProject, error)  {
+func (idea *IdeaProject) AnalysisProjectConfig() (*JavaProject, error) {
 	err := idea.analysisIdeaProjectConfig()
 	if err != nil {
 		return nil, err
@@ -106,7 +106,7 @@ func (idea *IdeaProject) AnalysisProjectConfig()(*JavaProject, error)  {
 }
 
 //解析idea模块配置文件
-func (idea *IdeaProject) analysisIdeaProjectConfig() error{
+func (idea *IdeaProject) analysisIdeaProjectConfig() error {
 	if idea.ProjectConfigPath == "" {
 		var ideaConfigFileName string
 		configFileCount := 0

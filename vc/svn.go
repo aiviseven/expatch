@@ -2,8 +2,8 @@ package vc
 
 import (
 	"bufio"
-	"expatch/util"
 	"fmt"
+	"github.com/bsh100220/expatch/util"
 	set "github.com/deckarep/golang-set"
 	"io"
 	"os/exec"
@@ -15,11 +15,11 @@ const diffLinePre = "Index: "
 
 type SVN struct {
 	CurrPath string
-	Args string
+	Args     string
 }
 
 //获取版本差异文件
-func (svn *SVN) GetDiffSet() (set.Set, error){
+func (svn *SVN) GetDiffSet() (set.Set, error) {
 	//获取svn差异信息
 	svnDiffInfo, err := svn.getSvnDiffInfo(svn.Args)
 	if err != nil {

@@ -2,11 +2,11 @@
 package main
 
 import (
-	"expatch/ide"
-	"expatch/util"
-	"expatch/vc"
 	"flag"
 	"fmt"
+	"github.com/bsh100220/expatch/ide"
+	"github.com/bsh100220/expatch/util"
+	"github.com/bsh100220/expatch/vc"
 	"strings"
 )
 

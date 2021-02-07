@@ -3,7 +3,7 @@ package ide
 import (
 	"encoding/xml"
 	"errors"
-	"expatch/util"
+	"github.com/bsh100220/expatch/util"
 )
 
 //普通eclipse配置
@@ -20,29 +20,29 @@ type ClasspathEntry struct {
 //eclipse Web配置
 //对应.settings/org.eclipse.wst.common.component文件
 type EclipseWebProjectConfig struct {
-	ProjectModuleId string `xml:"id,attr"`
-	ProjectVersion string `xml:"project-version,attr"`
-	WebModule WebModule `xml:"wb-module"`
+	ProjectModuleId string    `xml:"id,attr"`
+	ProjectVersion  string    `xml:"project-version,attr"`
+	WebModule       WebModule `xml:"wb-module"`
 }
 type WebModule struct {
-	DeployName string `xml:"deploy-name,attr"`
-	WebResources []WebResource `xml:"wb-resource"`
+	DeployName       string            `xml:"deploy-name,attr"`
+	WebResources     []WebResource     `xml:"wb-resource"`
 	DependentModules []DependentModule `xml:"dependent-module"`
-	Properties []Property `xml:"property"`
+	Properties       []Property        `xml:"property"`
 }
 type WebResource struct {
 	DeployPath string `xml:"deploy-path,attr"`
 	SourcePath string `xml:"source-path,attr"`
-	Tag string `xml:"tag,attr"`
+	Tag        string `xml:"tag,attr"`
 }
 type DependentModule struct {
-	ArchiveName string `xml:"archiveName,attr"`
-	DeployPath string `xml:"deploy-path,attr"`
-	Handle string `xml:"handle,attr"`
+	ArchiveName    string `xml:"archiveName,attr"`
+	DeployPath     string `xml:"deploy-path,attr"`
+	Handle         string `xml:"handle,attr"`
 	DependencyType string `xml:"dependency-type"`
 }
 type Property struct {
-	Name string `xml:"name,attr"`
+	Name  string `xml:"name,attr"`
 	Value string `xml:"value,attr"`
 }
 
@@ -50,7 +50,7 @@ type EclipseProject struct {
 	JavaProject
 }
 
-func (e *EclipseProject) AnalysisProjectConfig()(*JavaProject, error){
+func (e *EclipseProject) AnalysisProjectConfig() (*JavaProject, error) {
 	err := e.analysisEclipseNormalProjectConfig()
 	if err != nil {
 		return nil, err
@@ -63,7 +63,7 @@ func (e *EclipseProject) AnalysisProjectConfig()(*JavaProject, error){
 }
 
 //解析eclipse普通工程配置文件
-func (e *EclipseProject) analysisEclipseNormalProjectConfig() error{
+func (e *EclipseProject) analysisEclipseNormalProjectConfig() error {
 	projectConfigPath := e.ProjectPath + "/.classpath"
 	data := util.ReadXmlFile(projectConfigPath)
 	eclipseNormalConfig := EclipseNormalProjectConfig{}
@@ -83,8 +83,9 @@ func (e *EclipseProject) analysisEclipseNormalProjectConfig() error{
 	}
 	return nil
 }
+
 //解析eclipseWeb工程的配置文件
-func (e *EclipseProject) analysisEclipseWebProjectConfig () error{
+func (e *EclipseProject) analysisEclipseWebProjectConfig() error {
 	webConfigPath := e.ProjectPath + "/.settings/org.eclipse.wst.common.component"
 	isWebProject, _ := util.PathExists(webConfigPath)
 	if isWebProject {
@@ -99,7 +100,7 @@ func (e *EclipseProject) analysisEclipseWebProjectConfig () error{
 		}
 		for _, webResource := range eclipseWebConfig.WebModule.WebResources {
 			if webResource.DeployPath == "/" {
-				e.WebRootPaths = append(e.WebRootPaths, e.ProjectPath + webResource.SourcePath)
+				e.WebRootPaths = append(e.WebRootPaths, e.ProjectPath+webResource.SourcePath)
 			}
 		}
 	}
