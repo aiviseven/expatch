@@ -1,7 +1,7 @@
 # expatch
 java项目的增量补丁打包工具，学习go语言编写的小工具
 
-go get github.com/bsh100220/expatch
+go build -ldflags="-w -s"
 
 ```
 expatch --help

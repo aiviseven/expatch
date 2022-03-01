@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-//
+//diff文件行前缀，用于解析变更文件的路径
 const diffLinePre = "Index: "
 
 type SVN struct {
@@ -32,7 +32,7 @@ func (svn *SVN) GetDiffSet() (set.Set, error) {
 
 //通过svn diff命令获取差异信息
 func (svn *SVN) getSvnDiffInfo(svnArgs string) (string, error) {
-	svnArgsArr := []string{"diff", "-r"}
+	svnArgsArr := []string{"diff", "--summarize", "-r"}
 	if svnArgs == "" {
 		svnArgsArr = append(svnArgsArr, "HEAD")
 		if util.IsCygwin {
@@ -65,8 +65,8 @@ func (svn *SVN) convertSvnDiffList(reader io.Reader) set.Set {
 		}
 		line = strings.TrimSpace(line)
 
-		if strings.HasPrefix(line, diffLinePre) {
-			line = line[strings.Index(line, diffLinePre)+len(diffLinePre):]
+		if line != "" {
+			line = strings.TrimSpace(line[1:])
 			line = util.GetAbsolutePath(line)
 			if isExist, _ := util.PathExists(line); isExist {
 				copyFileSet.Add(line)
