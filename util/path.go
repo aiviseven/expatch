@@ -10,7 +10,7 @@ import (
 
 var IsCygwin bool
 
-func init()  {
+func init() {
 	checkOs()
 }
 
@@ -23,7 +23,7 @@ func checkOs() {
 	}
 }
 
-//获取当前路径
+// GetCurrentDirectory 获取当前路径
 func GetCurrentDirectory() string {
 	//dir, _ := os.Executable()
 	//exePath := filepath.Dir(dir)
@@ -31,7 +31,7 @@ func GetCurrentDirectory() string {
 	return exePath
 }
 
-//获取真实的绝对路径，并把路径分割符换成'/'
+// GetAbsolutePath 获取真实的绝对路径，并把路径分割符换成'/'
 func GetAbsolutePath(path string) (result string) {
 	if IsCygwin {
 		cmd := exec.Command("cygpath", "--absolute", "--windows", path)
@@ -44,7 +44,7 @@ func GetAbsolutePath(path string) (result string) {
 	return result
 }
 
-//将windows路径转换为cygwin路径
+// WinPathToCyg 将windows路径转换为cygwin路径
 func WinPathToCyg(winPath string) string {
 	if !IsCygwin {
 		return winPath
@@ -55,7 +55,7 @@ func WinPathToCyg(winPath string) string {
 	return result
 }
 
-//检查路径是否存在
+// PathExists 检查路径是否存在
 func PathExists(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {
@@ -67,7 +67,16 @@ func PathExists(path string) (bool, error) {
 	return false, err
 }
 
-//判断是否是src路径，如果是则返回src路径
+// IsDir 检查路径是否是文件夹
+func IsDir(path string) (bool, error) {
+	f, err := os.Stat(path)
+	if err != nil {
+		return false, err
+	}
+	return f.IsDir(), nil
+}
+
+// PathContains 判断是否是src路径，如果是则返回src路径
 func PathContains(paths []string, filePath string) (bool, string) {
 	for _, path := range paths {
 		if strings.Contains(filePath, path) {
@@ -77,8 +86,8 @@ func PathContains(paths []string, filePath string) (bool, string) {
 	return false, ""
 }
 
-//创建目录
-func Mkdir(dirPath string) (string, error){
+// Mkdir 创建目录
+func Mkdir(dirPath string) (string, error) {
 	dirPath = GetAbsolutePath(dirPath)
 	//如果输出路径不存在则新建
 	if isExist, _ := PathExists(dirPath); !isExist {

@@ -9,7 +9,7 @@ import (
 )
 
 type IDE interface {
-	//解析项目配置
+	// AnalysisProjectConfig 解析项目配置
 	AnalysisProjectConfig() (*JavaProject, error)
 }
 
@@ -31,11 +31,14 @@ func GetInstance(typeName, projectConfigPath string) IDE {
 	return &IdeaProject{JavaProject: JavaProject{ProjectPath: currPath}, ProjectConfigPath: projectConfigPath}
 }
 
-//复制源文件到指定位置
+// ConvertPatchDir 复制源文件到指定位置
 func ConvertPatchDir(copySet set.Set, javaProject *JavaProject, patchOutPath string) error {
 	copySet.Each(func(i interface{}) bool {
 		copyFilePath := i.(string)
-
+		isDir, err := util.IsDir(copyFilePath)
+		if err != nil || isDir {
+			return false
+		}
 		fmt.Println(copyFilePath)
 
 		_, javaSrcPath := util.PathContains(javaProject.JavaSrcPaths, copyFilePath)
