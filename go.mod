@@ -1,4 +1,4 @@
-module github.com/bsh100220/expatch
+module github.com/aiviseven/expatch
 
 go 1.16
 

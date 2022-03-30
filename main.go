@@ -4,9 +4,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/bsh100220/expatch/ide"
-	"github.com/bsh100220/expatch/util"
-	"github.com/bsh100220/expatch/vc"
+	"github.com/aiviseven/expatch/ide"
+	"github.com/aiviseven/expatch/util"
+	"github.com/aiviseven/expatch/vc"
 	"strings"
 )
 
