@@ -1,14 +1,16 @@
 package util
 
 import (
+	"bufio"
 	"fmt"
+	set "github.com/deckarep/golang-set"
 	"io"
 	"io/ioutil"
 	"os"
 	"strings"
 )
 
-//复制文件
+// CopyFile 复制文件
 func CopyFile(src, dst string) (int64, error) {
 	sourceFileStat, err := os.Stat(src)
 	if err != nil {
@@ -46,18 +48,42 @@ func CopyFile(src, dst string) (int64, error) {
 	return nBytes, err
 }
 
-//读取xml文件为[]byte
-func ReadXmlFile(filePath string) []byte {
+// ReadFile 读取xml文件为[]byte
+func ReadFile(filePath string) []byte {
 	file, err := os.Open(filePath)
 	if err != nil {
-		fmt.Printf("error: %v", err)
+		fmt.Printf("error: %v\n", err)
 		return nil
 	}
 	defer file.Close()
 	data, err := ioutil.ReadAll(file)
 	if err != nil {
-		fmt.Printf("error: %v", err)
+		fmt.Printf("error: %v\n", err)
 		return nil
 	}
 	return data
+}
+
+// ReadFileToSet 按行读取文件为set
+func ReadFileToSet(filePath string) set.Set {
+	if filePath == "" {
+		return nil
+	}
+
+	s := set.NewSet()
+	f, err := os.Open(filePath)
+	if err != nil {
+		fmt.Printf("error: %v\n", err)
+		return nil
+	}
+
+	r := bufio.NewReader(f)
+	for {
+		l, _, err := r.ReadLine()
+		if err == io.EOF {
+			break
+		}
+		s.Add(string(l))
+	}
+	return s
 }

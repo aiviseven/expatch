@@ -65,7 +65,7 @@ func (e *EclipseProject) AnalysisProjectConfig() (*JavaProject, error) {
 //解析eclipse普通工程配置文件
 func (e *EclipseProject) analysisEclipseNormalProjectConfig() error {
 	projectConfigPath := e.ProjectPath + "/.classpath"
-	data := util.ReadXmlFile(projectConfigPath)
+	data := util.ReadFile(projectConfigPath)
 	eclipseNormalConfig := EclipseNormalProjectConfig{}
 	if data == nil {
 		return errors.New("eclipse project config is blank")
@@ -89,7 +89,7 @@ func (e *EclipseProject) analysisEclipseWebProjectConfig() error {
 	webConfigPath := e.ProjectPath + "/.settings/org.eclipse.wst.common.component"
 	isWebProject, _ := util.PathExists(webConfigPath)
 	if isWebProject {
-		data := util.ReadXmlFile(webConfigPath)
+		data := util.ReadFile(webConfigPath)
 		eclipseWebConfig := EclipseWebProjectConfig{}
 		if data == nil {
 			return errors.New("未找到eclipse工程配置信息")

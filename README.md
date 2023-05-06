@@ -6,7 +6,9 @@ go build -ldflags="-w -s"
 ```
 expatch --help
  -conf string
-        idea模块配置文件路径，当type=idea时候有效  
+        idea模块配置文件路径，当type=idea时候有效
+ -ignore string
+        忽略文件的配置文件路径，需要忽略的文件路径按行填写 (default ".expatch_ignore")
  -out string
         输出目录，默认为当前目录下的【patch+当前时间】目录
  -svn string

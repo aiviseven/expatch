@@ -2,10 +2,12 @@ package vc
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"github.com/aiviseven/expatch/util"
 	set "github.com/deckarep/golang-set"
 	"io"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -47,8 +49,18 @@ func (svn *SVN) getSvnDiffInfo(svnArgs string) (string, error) {
 	}
 
 	cmd := exec.Command("svn", svnArgsArr...)
-	buf, err := cmd.Output()
-	return fmt.Sprintf("%s\n", buf), err
+
+	//防止出现需要交互输入密码的情况会导致报错
+	//buf, err := cmd.Output()
+	var stdout bytes.Buffer
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = &stdout
+	cmd.Start()
+	cmd.Wait()
+
+	rst := fmt.Sprintf("%s\n", string(stdout.Bytes()))
+	//fmt.Printf("svn diff info:\n%s", rst)
+	return rst, nil
 }
 
 //读取svn差异文件得到有变更的文件列表

@@ -128,7 +128,7 @@ func (idea *IdeaProject) analysisIdeaProjectConfig() error {
 		idea.ProjectConfigPath = util.GetAbsolutePath(idea.ProjectConfigPath)
 	}
 
-	data := util.ReadXmlFile(idea.ProjectConfigPath)
+	data := util.ReadFile(idea.ProjectConfigPath)
 	ideaProjectConfig := IdeaProjectConfig{}
 	if data == nil {
 		return errors.New("未找到idea模块配置信息")
