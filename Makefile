@@ -3,7 +3,6 @@ build:win64
 mac:
 	@echo "build in macos"
 	@CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -ldflags="-w -s" -o expatch-mac
-	@upx expatch-mac
 linux:
 	@echo "build in linux"
 	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o expatch-linux
