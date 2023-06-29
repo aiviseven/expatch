@@ -7,10 +7,11 @@ import (
 	"github.com/aiviseven/expatch/ide"
 	"github.com/aiviseven/expatch/util"
 	"github.com/aiviseven/expatch/vc"
+	"os"
 	"strings"
 )
 
-var currPath, projectType, projectConfigFilePath, patchOutPath, ignoreConfFilePath string
+var currPath, projectType, projectConfigFilePath, patchOutPath, ignoreConfFilePath, author string
 
 func main() {
 	//获取当前路径的绝对路径
@@ -21,6 +22,7 @@ func main() {
 	flag.StringVar(&ignoreConfFilePath, "ignore", ".expatch_ignore", "忽略文件的配置文件路径，需要忽略的文件路径按行填写")
 	flag.StringVar(&projectType, "type", "idea", "项目类型，可选(idea,eclipse)，默认为idea")
 	flag.StringVar(&projectConfigFilePath, "conf", "", "idea模块配置文件路径，当type=idea时候有效")
+	flag.StringVar(&author, "author", "", "补丁创建人")
 	svnArgs := flag.String("svn", "", "需要对比的两个版本，版本号用英文冒号(:)分隔，带有文件路径则用空格分割，例：'100:95'、'100 .'，为空时则对比当前目录与svn最新版本")
 	flag.Parse()
 
@@ -80,6 +82,25 @@ func main() {
 	if err != nil {
 		fmt.Printf("error: %v\n", err)
 		return
+	}
+
+	//生成补丁信息文件，当补丁创建人不为空时默认生成补丁记录信息文件
+	if author != "" {
+		revision, info := svn.GetSvnInfo(author)
+		if info != "" {
+			pp, err := util.Mkdir(patchOutPath + "/WEB-INF/patch/")
+			if err != nil {
+				fmt.Printf("error: %v\n", err)
+				return
+			}
+			pd, err := os.OpenFile(pp+"/patch."+revision+".properties", os.O_WRONLY|os.O_CREATE, 0644)
+			if err != nil {
+				fmt.Printf("error: %v\n", err)
+				return
+			}
+			defer pd.Close()
+			pd.WriteString(info)
+		}
 	}
 
 	fmt.Println("Done!")
